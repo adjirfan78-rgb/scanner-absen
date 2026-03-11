@@ -43,7 +43,7 @@ border-radius:10px;
 
 <br><br>
 
-<video id="video"></video>
+<video id="video" autoplay playsinline></video>
 
 <div id="hasil">Menunggu scan...</div>
 
@@ -55,16 +55,19 @@ border-radius:10px;
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzttBMrzuGxWOyXJWO7HMPAP1Friy5p2lsfCF09iQ32XOhNL-yGQ6iSi4QeVv6wTO4Zxg/exec";
+const API="LINK_WEB_APP_KAMU";
 
-let codeReader;
 let scanning=true;
 
-function startCamera(){
+async function startCamera(){
 
-codeReader=new ZXing.BrowserBarcodeReader();
+const codeReader = new ZXing.BrowserMultiFormatReader();
 
-codeReader.decodeFromVideoDevice(null,'video',(result,err)=>{
+const videoInputDevices = await codeReader.listVideoInputDevices();
+
+const selectedDeviceId = videoInputDevices[0].deviceId;
+
+codeReader.decodeFromVideoDevice(selectedDeviceId,'video',(result,err)=>{
 
 if(result && scanning){
 
@@ -86,7 +89,7 @@ document.getElementById("beep").play();
 
 setTimeout(()=>{
 scanning=true;
-},3000);
+},2000);
 
 });
 
